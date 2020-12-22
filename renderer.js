@@ -4,13 +4,20 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-const electron = require('electron');
-const path = require('path');
-const { env } = require('./vendor');
 
-const { ipcRenderer, remote } = electron;
+
+const ipcRenderer = require('electron').ipcRenderer
+const app = require('electron').remote.app
+const path = require('path')
+let env;
+try {
+    env = require('./env.prod').env
+} catch (error) {
+    env = require('./env').env
+}
+
+
 const { join } = path;
-const app = remote.app;
 
 document.addEventListener("DOMContentLoaded", function (event) {
     // Your code to run since DOM is loaded and ready
@@ -29,17 +36,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
 
         const carouselItem = document.createElement('div');
+        carouselItem.id = imageName;
         carouselItem.classList = ['carousel-item active'];
-
         const img = document.createElement('img');
-
-        console.log('image path : ' + imgDataPath);
-
         img.src = imgDataPath;
-
         img.classList = ['d-block w-100 mh-100'];
         carouselItem.appendChild(img);
         contentPane.appendChild(carouselItem);
+    });
+
+    ipcRenderer.on('image:remove', function (e, imageName) {
+        console.log('image name : ' + imageName);
+        const carouselItem = document.getElementById(imageName);
+        carouselItem.remove();
     });
 
 
