@@ -1,0 +1,22 @@
+{
+  "name": "signage",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Signage"
+  ],
+  "author": "Thomas Schalldach",
+  "license": "NoHarm",
+  "devDependencies": {
+    "electron": "^11.1.0"
+  },
+  "dependencies": {
+    "electron-log": "^4.3.1",
+    "electron-ssh2": "^0.1.2"
+  }
+}
