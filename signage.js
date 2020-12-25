@@ -4,9 +4,9 @@ const { readdirSync, existsSync, mkdirSync, unlinkSync } = require('fs')
 const { join } = require('path');
 let env;
 try {
-    env = require('./env.prod').env
+  env = require('./env.prod').env
 } catch (error) {
-    env = require('./env').env
+  env = require('./env').env
 }
 const { Client } = require('electron-ssh2')
 
@@ -28,6 +28,10 @@ module.exports = {
       mainWindow.webContents.send('image:add', el);
     });
   },
+  findDifference: function (leftSet, rightSet) {
+    rightSet = new Set([...rightSet]);
+    return new Set([...leftSet].filter(x => !rightSet.has(x)));
+  },
   deletePicture: function (filename) {
     log.debug('Attempting deletion of local image: ' + filename);
     // 1. delete from view
@@ -40,15 +44,17 @@ module.exports = {
       return;
     }
     // 3. delete from filename[]
-    filenames.splice(filenames.findIndex(el => el === filename));
-
+    const index = filenames.indexOf(filename);
+    if (index > -1) {
+      filenames.splice(index, 1);
+    }
   },
 
   downloadImages: function () {
 
     const conn = new Client();
     conn.on('ready', function () {
-      log.debug('SSH Client Ready');
+      log.debug('SSH Client Connected');
       conn.sftp((err, sftp) => {
         if (err) {
           log.debug(err);
@@ -59,14 +65,20 @@ module.exports = {
             log.debug(err);
             throw err;
           }
-          //console.dir(list);
-          list.forEach(element => {
-            if (!element) {
-              log.debug('Strange things going on');
-            }
-            const file = element.filename;
-            if (filenames.includes(file)) {
-              log.debug('nothing to do, ' + file + ' already downloaded');
+
+          let filenamesOnServer = new Set(list.map(el => el.filename));
+          if (new Set(filenames).isEqual(filenamesOnServer)) {
+            log.debug('Nothing to do, closing connection');
+            conn.end();
+            return;
+          }
+          let toBeDeleted = module.exports.findDifference(filenames, filenamesOnServer);
+          let toBeDownloaded = module.exports.findDifference(filenamesOnServer, filenames);
+          toBeDeleted.forEach(filename => module.exports.deletePicture(filename));
+
+          toBeDownloaded.forEach(file => {
+            if (!file) {
+              log.debug('Strange things are going on');
               return;
             }
             log.debug('Trying to download ' + env.REMOTE_FOLDER + file + ' to dir: ' + join(dataPath, file));
@@ -78,8 +90,11 @@ module.exports = {
                 log.debug('Finsihed download ' + env.REMOTE_FOLDER + file + ' to dir: ' + join(dataPath, file));
                 mainWindow.webContents.send('image:add', file);
                 filenames.push(file);
+                if (new Set(filenames).isEqual(filenamesOnServer)) {
+                  log.debug('Nothing to do, closing connection');
+                  conn.end();
+                }
               }
-
             });
           });
         });
@@ -111,4 +126,9 @@ module.exports = {
   giveLifeSign: function () {
     log.debug('App is alive');
   }
+}
+Set.prototype.isEqual = function (otherSet) {
+  if (this.size !== otherSet.size) return false;
+  for (let item of this) if (!otherSet.has(item)) return false;
+  return true;
 }
