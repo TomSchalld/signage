@@ -18,6 +18,29 @@ To use this app you will need [Node.js](https://nodejs.org/en/download/) (which 
 git clone https://github.com/TomSchalld/signage
 # Go into the repository
 cd signage
+```
+
+Edit the env.js or create a env.prod.js file like below:
+
+```js
+module.exports = {
+    env: {
+
+        LOCAL_FOLDER: 'img', // Folder where images are stored
+        REMOTE_FOLDER: '/', // Folder where images should be found on the server
+        SFTP_PROVIDER: 'ssh.example.com', // SFTP Host
+        SFTP_PORT: 22, // Port of the SFTP server
+        SFTP_USER: 'sftp_user', // SFTP user 
+        SFTP_PASSWORD: 'sftp_password', // SFTP password
+        ENABLE_KIOSK: false, // should the application switch into Kiosk mode aka full screen after loading
+        REFRESH_INTERVAL: 10000 // how often shall the SFTP server be polled for updates, in milliseconds
+
+    }
+};
+```
+Almost there just run the following: 
+
+```bash
 # Install dependencies
 npm install
 # Run the app
