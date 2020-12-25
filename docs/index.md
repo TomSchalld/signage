@@ -9,6 +9,22 @@ The idea is, you put some images on some sftp server and the pi runs a kiosk mod
 
 Periodically it will try to sync images from remote to local.
 
+
+![](https://media.giphy.com/media/jfCiiXRssTQcsLw897/giphy.gif)
+
+
+
+**What can it do as of latest release**
+
+* KIOSK mode 
+* next, previous image via arrows
+* download images via SFTP
+* check if download is needed (polling), otherwise dont download
+* synchronise images (delete from local when deleted from server)
+* scaled to show full picture
+
+
+
 ## How To Use
 
 To use this app you will need [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
