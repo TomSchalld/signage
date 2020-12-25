@@ -65,12 +65,3 @@ npm start
 
 Note: I really didnt bother too much with this as it is almost Christmas. I see however that there is a range of use cases that could easily be implemented.
       Additionally I also am fully aware that you can package electron apps into binaries. Yeah you got me I was lazy ;) 
-
-
-## How To Contribute
-
-Use your brain, dont make a mess and ...
-
-![](https://media.giphy.com/media/3o84sw9CmwYpAnRRni/giphy.gif)
-
-
