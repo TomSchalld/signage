@@ -31,7 +31,7 @@ function createWindow() {
     signage.setMainWindow(mainWindow);
     signage.loadExistingPictures();
     signage.downloadImages();
-    setInterval(function () { signage.downloadImages(); }, 10000);
+    setInterval(function () { signage.downloadImages(); }, env.REFRESH_INTERVAL);
     mainWindow.kiosk = env.ENABLE_KIOSK;
   });
 
