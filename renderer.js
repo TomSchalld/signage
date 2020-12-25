@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         carouselItem.classList = ['carousel-item active'];
         const img = document.createElement('img');
         img.src = imgDataPath;
-        img.classList = ['d-block w-100 mh-100'];
+        img.classList = ['d-block mw-100 mh-100 mx-auto'];
         carouselItem.appendChild(img);
         contentPane.appendChild(carouselItem);
     });
