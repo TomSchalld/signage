@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (carouselItems) {
             Array.from(carouselItems).forEach(element => {
                 element.classList = ['carousel-item'];
+                element.style.height = '' + remotewindow.getSize()[1] + 'px';
+                element.style.width = '' + remotewindow.getSize()[0] + 'px';
             });
         }
 
