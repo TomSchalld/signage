@@ -19,10 +19,16 @@ try {
 
 const { join } = path;
 
+
+
+
+
 document.addEventListener("DOMContentLoaded", function (event) {
     // Your code to run since DOM is loaded and ready
     const dataPath = join(app.getPath('userData'), env.LOCAL_FOLDER);
-    console.log(dataPath);
+    const remotewindow = require('electron').remote.getCurrentWindow();
+    setupStyleAccordingToScreenSize(remotewindow.getSize()[0], remotewindow.getSize()[1]);
+    remotewindow.on('resize', () => setupStyleAccordingToScreenSize(remotewindow.getSize()[0], remotewindow.getSize()[1]));
 
     ipcRenderer.on('image:add', function (e, imageName) {
         console.log('image name : ' + imageName);
@@ -32,6 +38,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (carouselItems) {
             Array.from(carouselItems).forEach(element => {
                 element.classList = ['carousel-item'];
+                element.style.height = '' + remotewindow.getSize()[1] + 'px';
+                element.style.width = '' + remotewindow.getSize()[0] + 'px';
             });
         }
 
@@ -40,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         carouselItem.classList = ['carousel-item active'];
         const img = document.createElement('img');
         img.src = imgDataPath;
-        img.classList = ['d-block w-100 mh-100'];
+        img.classList = ['d-block mw-100 mh-100 mx-auto'];
         carouselItem.appendChild(img);
         contentPane.appendChild(carouselItem);
     });
@@ -54,3 +62,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
 });
+
+function setupStyleAccordingToScreenSize(width, height) {
+    const carouselItems = document.getElementsByClassName('carousel-item');
+    if (carouselItems) {
+        Array.from(carouselItems).forEach(element => {
+            element.style.height = '' + height + 'px';
+            element.style.width = '' + width + 'px';
+        });
+    }
+
+}
+
