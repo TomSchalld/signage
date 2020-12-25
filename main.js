@@ -5,9 +5,9 @@ const log = require('electron-log')
 const signage = require('./signage');
 let env;
 try {
-    env = require('./env.prod').env
+  env = require('./env.prod').env
 } catch (error) {
-    env = require('./env').env
+  env = require('./env').env
 }
 
 let mainWindow;
@@ -31,7 +31,7 @@ function createWindow() {
     signage.setMainWindow(mainWindow);
     signage.loadExistingPictures();
     signage.downloadImages();
-    () => setTimeout(downloadImages, 10000);
+    setInterval(function () { signage.downloadImages(); }, 10000);
     mainWindow.kiosk = env.ENABLE_KIOSK;
   });
 
