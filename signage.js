@@ -22,11 +22,17 @@ module.exports = {
   loadExistingPictures: function () {
     log.debug('Attempting load of local images');
     const root = readdirSync(dataPath);
+    if(root.length>0)
     root.forEach(el => {
+      log.debug(el);
+      if(el.startsWith('.')){
+        return;
+      }
       filenames.push(el);
       log.debug('Making IPC call to send ' + el);
       mainWindow.webContents.send('image:add', el);
     });
+    log.debug('finished reading local dir');
   },
   findDifference: function (leftSet, rightSet) {
     rightSet = new Set([...rightSet]);
