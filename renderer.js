@@ -9,6 +9,7 @@
 const ipcRenderer = require('electron').ipcRenderer
 const app = require('electron').remote.app
 const path = require('path')
+
 let env;
 try {
     env = require('./env.prod').env
@@ -29,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const remotewindow = require('electron').remote.getCurrentWindow();
     setupStyleAccordingToScreenSize(remotewindow.getSize()[0], remotewindow.getSize()[1]);
     remotewindow.on('resize', () => setupStyleAccordingToScreenSize(remotewindow.getSize()[0], remotewindow.getSize()[1]));
+
+   document.getElementById('imageSlider').setAttribute("data-bs-interval",env.SLIDER_INTERVAL);
 
     ipcRenderer.on('image:add', function (e, imageName) {
         console.log('image name : ' + imageName);

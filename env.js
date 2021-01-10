@@ -9,7 +9,8 @@ module.exports = {
         SFTP_USER: 'sftp_user',
         SFTP_PASSWORD: 'sftp_password',
         ENABLE_KIOSK: false,
-        REFRESH_INTERVAL: 10000
+        REFRESH_INTERVAL: 10000,
+        SLIDER_INTERVAL: 25000
 
     }
 };
